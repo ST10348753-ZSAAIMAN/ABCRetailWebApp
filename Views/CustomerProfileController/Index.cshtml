@@ -1,0 +1,29 @@
+﻿@model IEnumerable<CustomerProfile>
+
+<h2>Customer Profiles</h2>
+<a asp-action="Create">Create New Profile</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in Model)
+        {
+            <tr>
+                <td>@profile.RowKey</td>
+                <td>@profile.PartitionKey</td>
+                <td>@profile.Email</td>
+                <td>@profile.PhoneNumber</td>
+                <td>
+                    <a asp-action="Delete" asp-route-partitionKey="@profile.PartitionKey" asp-route-rowKey="@profile.RowKey">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

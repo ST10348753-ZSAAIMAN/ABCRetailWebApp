@@ -1,0 +1,26 @@
+﻿@model IEnumerable<BlobItem>
+
+<h2>Blobs</h2>
+<a asp-action="Upload">Upload New Blob</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Blob Name</th>
+            <th>URL</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var blob in Model)
+        {
+                <tr>
+                    <td>@blob.BlobName</td>
+                    <td><a href="@blob.BlobUrl">@blob.BlobUrl</a></td>
+                    <td>
+                        <a asp-action="Download" asp-route-blobName="@blob.BlobName">Download</a> |
+                        <a asp-action="Delete" asp-route-blobName="@blob.BlobName">Delete</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
