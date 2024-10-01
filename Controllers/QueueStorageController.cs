@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 public class QueueStorageController : Controller
 {
@@ -13,7 +12,13 @@ public class QueueStorageController : Controller
     public async Task<IActionResult> Index()
     {
         var messages = await _queueStorageService.ReceiveMessagesAsync();
-        return View(messages);
+        var viewModel = messages.Select(m => new QueueMessageViewModel
+        {
+            MessageId = m.MessageId,
+            PopReceipt = m.PopReceipt,
+            Content = m.MessageText
+        }).ToList();
+        return View(viewModel);
     }
 
     public IActionResult SendMessage()
@@ -32,9 +37,23 @@ public class QueueStorageController : Controller
         return View();
     }
 
-    public async Task<IActionResult> DeleteMessage(string messageId, string popReceipt)
+    public IActionResult DeleteMessage(string messageId, string popReceipt)
+    {
+        var model = new Tuple<string, string>(messageId, popReceipt);
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteMessageConfirmed(string messageId, string popReceipt)
     {
         await _queueStorageService.DeleteMessageAsync(messageId, popReceipt);
         return RedirectToAction(nameof(Index));
     }
+}
+
+public class QueueMessageViewModel
+{
+    public string MessageId { get; set; }
+    public string PopReceipt { get; set; }
+    public string Content { get; set; }
 }
