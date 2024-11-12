@@ -15,8 +15,9 @@ public class BlobStorageController : Controller
     public async Task<IActionResult> Index()
     {
         var blobs = await _blobStorageService.ListBlobsAsync();
-        return View(blobs);
+        return View(blobs); 
     }
+
 
     public IActionResult Upload()
     {

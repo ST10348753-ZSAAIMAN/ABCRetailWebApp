@@ -16,10 +16,12 @@ public class QueueStorageController : Controller
         {
             MessageId = m.MessageId,
             PopReceipt = m.PopReceipt,
-            Content = m.MessageText
+            Content = m.Content // Use Content directly instead of Body.ToString()
         }).ToList();
+
         return View(viewModel);
     }
+
 
     public IActionResult SendMessage()
     {
@@ -53,7 +55,8 @@ public class QueueStorageController : Controller
 
 public class QueueMessageViewModel
 {
-    public string MessageId { get; set; }
-    public string PopReceipt { get; set; }
-    public string Content { get; set; }
+    public string? MessageId { get; set; }
+    public string? PopReceipt { get; set; }
+    public string? Content { get; set; }
 }
+

@@ -1,6 +1,8 @@
 ﻿using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public class QueueStorageService
@@ -19,10 +21,18 @@ public class QueueStorageService
         await _queueClient.SendMessageAsync(message);
     }
 
-    public async Task<QueueMessage[]> ReceiveMessagesAsync(int maxMessages = 10)
+    // Adjusted to return a list of your custom QueueMessage objects
+    public async Task<List<QueueMessage>> ReceiveMessagesAsync(int maxMessages = 10)
     {
-        var messages = await _queueClient.ReceiveMessagesAsync(maxMessages);
-        return messages.Value;
+        var receivedMessages = await _queueClient.ReceiveMessagesAsync(maxMessages);
+
+        // Map each Azure QueueMessage to your custom QueueMessage class
+        return receivedMessages.Value.Select(m => new QueueMessage
+        {
+            MessageId = m.MessageId,
+            PopReceipt = m.PopReceipt,
+            Content = m.Body.ToString() // Convert the message body to string
+        }).ToList();
     }
 
     public async Task DeleteMessageAsync(string messageId, string popReceipt)

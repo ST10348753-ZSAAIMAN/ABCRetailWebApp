@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+
 namespace ABCRetailWebApp
 {
     public class Program
@@ -9,13 +11,18 @@ namespace ABCRetailWebApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Register custom services
+            builder.Services.AddSingleton<QueueStorageService>();
+            builder.Services.AddSingleton<BlobStorageService>();
+            builder.Services.AddSingleton<TableStorageService>();
+            builder.Services.AddSingleton<FileStorageService>(); 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

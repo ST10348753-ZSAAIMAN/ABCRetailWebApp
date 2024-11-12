@@ -12,6 +12,6 @@ public class CustomerProfile : TableEntity
     // Default constructor for TableEntity serialization
     public CustomerProfile() { }
 
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
+    public string? Email { get; set; }         // Make Email nullable
+    public string? PhoneNumber { get; set; }   // Make PhoneNumber nullable
 }
